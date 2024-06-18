@@ -1,7 +1,22 @@
 import { Hono } from "hono";
 import { getStatusCodeInfo, isValidStatusCode } from "./lib/utils";
 
-const app = new Hono();
+type Bindings = {
+  RATE_LIMITER: any;
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
+
+app.use(async (c, next) => {
+  const pathname = c.req.path;
+
+  const { success } = await c.env.RATE_LIMITER.limit({ key: pathname });
+  if (!success) {
+    return c.text("Rate limit exceeded", { status: 429 });
+  }
+
+  await next();
+});
 
 app.get("/", (c) => {
   return c.text(`Welcome to http API!
