@@ -24,7 +24,7 @@ app.get("/", (c) => {
 http API Documentation
 
 === Overview
-The http API provides a simple and efficient way to test HTTP status codes. By using this API, developers can quickly generate responses with specific status codes for testing purposes.
+The http API provides a simple and efficient way to test HTTP status codes. By using this API, developers can quickly generate responses with specific status codes for testing purposes. The status code is based on the HTTP status code registry: https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml.
 
 === How to Use
 
@@ -38,6 +38,12 @@ The http API provides a simple and efficient way to test HTTP status codes. By u
 
 2. Receive the Response:
    The API will return a response with the designated status code you specified in the URL.
+
+3. Important Notes:
+   Since a valid HTTP status code range is from 200 to 599, the API will return:
+   - 200 for status code between 100 and 199;
+   - 400 for any other valid status code.
+   - 429 for rate limit exceeded.
 
 === Usage Limits
 
@@ -79,7 +85,7 @@ app.get("/:code", (c) => {
 
   const cInfo = getStatusCodeInfo(codeInt);
 
-  return c.json(cInfo, { status: codeInt });
+  return c.json(cInfo, { status: codeInt < 200 ? 200 : codeInt });
 });
 
 export default app;

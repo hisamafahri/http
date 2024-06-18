@@ -1,7 +1,7 @@
 import { STATUS_CODES, StatusCodeInfo } from "./constants";
 
 export const isValidStatusCode = (code: number) => {
-  if (code < 100 || code > 600) {
+  if (code < 100 || code >= 600) {
     return false;
   }
 
