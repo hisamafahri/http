@@ -1,4 +1,4 @@
-name = "statuses"
+name = "http"
 compatibility_date = "2023-12-01"
 
 send_metrics = false
